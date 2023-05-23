@@ -2,7 +2,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   target: 'server',
   head: {
-    title: 'easycopies',
+    title: 'Easy Copies',
     htmlAttrs: {
       lang: 'en'
     },
@@ -20,7 +20,7 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/css/main.css',
-    // '~/assets/scss/main.scss',
+    '~/assets/scss/main.scss',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -34,11 +34,18 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/google-fonts'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
   ],
+
+  googleFonts: {
+    families: {
+      Quicksand: true,
+    }
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

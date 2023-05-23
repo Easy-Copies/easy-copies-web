@@ -1,8 +1,6 @@
 <template>
-  <div class="bg-green-200">
-    <div class="container mx-auto">
-      <div class="h-96 bg-green-300">testinggggg</div>
-    </div>
+  <div>
+    <DesktopHomePage />
   </div>
 </template>
 
