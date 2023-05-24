@@ -8,7 +8,7 @@
                     <NuxtLink to="/" class="hover:text-blue-300">Service</NuxtLink>
                     <NuxtLink to="/" class="hover:text-blue-300">About</NuxtLink>
                     <NuxtLink to="/" class="hover:text-blue-300">Contact</NuxtLink>
-                    <NuxtLink to="/" class="hover:text-blue-300">Login</NuxtLink>
+                    <NuxtLink to="/login" class="hover:text-blue-300">Login</NuxtLink>
                 </div>
             </div>
         </div>
