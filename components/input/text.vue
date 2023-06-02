@@ -30,9 +30,6 @@ export default {
 		'kelas',
 		'required'
 	],
-	data() {
-		return {}
-	},
 	methods: {
 		handleInput(event) {
 			this.$emit('input', event.target.value)
