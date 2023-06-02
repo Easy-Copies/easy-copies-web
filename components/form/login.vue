@@ -6,10 +6,10 @@
 		</div>
 		<div class="bg-primary rounded-r-xl p-10 text-white">
 			<img
-				@click="btnClose"
 				class="w-5 h-5 cursor-pointer ml-auto"
 				src="/icons/icon-close-white.png"
 				alt="ic-close"
+				@click="btnClose"
 			/>
 			<div class="text-4xl text-center mb-7">Login</div>
 			<div class="w-full lg:w-[320px]">
@@ -30,9 +30,12 @@
 							:name="prefixName + 'password'"
 						/>
 					</div>
-					<nuxt-link to="/forgot-password" class="flex justify-end text-sm mb-2"
-						>Lupa Password?</nuxt-link
+					<nuxt-link
+						to="/forgot-password"
+						class="flex justify-end text-sm mb-2"
 					>
+						Lupa Password?
+					</nuxt-link>
 					<button class="button-default w-full">Login</button>
 				</form>
 
@@ -40,12 +43,12 @@
 
 				<div class="text-center text-sm mb-4">Belum punya akun?</div>
 				<div class="flex items-center gap-2.5">
-					<nuxt-link to="/register-toko" class="button-default w-full"
-						>Daftarkan Toko</nuxt-link
-					>
-					<nuxt-link to="/register-user" class="button-default w-full"
-						>Daftar Individu</nuxt-link
-					>
+					<nuxt-link to="/register-toko" class="button-default w-full">
+						Daftarkan Toko
+					</nuxt-link>
+					<nuxt-link to="/register-user" class="button-default w-full">
+						Daftar Individu
+					</nuxt-link>
 				</div>
 			</div>
 		</div>

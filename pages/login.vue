@@ -1,12 +1,11 @@
 <template>
-    <div class="lg:flex lg:min-h-screen items-center justify-center">
-        <FormLogin />
-    </div>
+	<div class="lg:flex lg:min-h-screen items-center justify-center">
+		<FormLogin />
+	</div>
 </template>
-
 
 <script>
 export default {
-    layout: 'login'
+	layout: 'login'
 }
 </script>
