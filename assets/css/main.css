@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
-    .button-default {
-        @apply text-white bg-secondary rounded-lg py-2.5 px-4 text-center hover:bg-secondary/90
-    }
+	.button-default {
+		@apply text-white bg-secondary rounded-lg py-2.5 px-4 text-center hover:bg-secondary/90;
+	}
 }

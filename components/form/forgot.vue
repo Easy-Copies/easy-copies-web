@@ -6,10 +6,10 @@
 		</div>
 		<div class="bg-primary rounded-r-xl p-10 text-white">
 			<img
-				@click="btnClose"
 				class="w-5 h-5 cursor-pointer ml-auto"
 				src="/icons/icon-close-white.png"
 				alt="ic-close"
+				@click="btnClose"
 			/>
 			<div class="text-4xl text-center mb-7">Lupa Password</div>
 			<div class="text-sm mb-4">Masukkan alamat email untuk menerima OTP</div>

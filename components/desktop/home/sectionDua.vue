@@ -19,7 +19,9 @@
 						:src="item.image"
 						:alt="item.alt"
 					/>
-					<div class="text-xl lg:text-[32px] text-center">{{ item.label }}</div>
+					<div class="text-xl lg:text-[32px] text-center">
+						{{ item.label }}
+					</div>
 				</div>
 			</div>
 		</div>
