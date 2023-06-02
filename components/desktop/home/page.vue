@@ -1,19 +1,16 @@
 <template>
-    <div>
-        <DesktopHomeSectionSatu />
-        <DesktopHomeSectionDua />
-        <DesktopHomeSectionTiga />
-        <DesktopHomeSectionEmpat />
-    </div>
+	<div>
+		<DesktopHomeSectionSatu />
+		<DesktopHomeSectionDua />
+		<DesktopHomeSectionTiga />
+		<DesktopHomeSectionEmpat />
+	</div>
 </template>
-
 
 <script>
 export default {
-    data() {
-        return {
-            
-        }
-    },
+	data() {
+		return {}
+	}
 }
 </script>
