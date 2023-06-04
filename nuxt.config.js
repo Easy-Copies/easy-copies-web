@@ -1,3 +1,7 @@
+import webpack from 'webpack'
+require('dotenv').config()
+// const _ = require('lodash')
+
 export default {
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	target: 'server',
@@ -8,11 +12,20 @@ export default {
 		},
 		meta: [
 			{ charset: 'utf-8' },
-			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+			{
+				name: 'viewport',
+				content: 'width=device-width, initial-scale=1'
+			},
 			{ hid: 'description', name: 'description', content: '' },
 			{ name: 'format-detection', content: 'telephone=no' }
 		],
-		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+		link: [
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+			{
+				rel: 'stylesheet',
+				href: 'https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css'
+			}
+		]
 	},
 
 	// Global CSS: https://go.nuxtjs.dev/config-css
@@ -32,7 +45,13 @@ export default {
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
-	modules: [],
+	modules: [
+		'@nuxtjs/axios',
+		'@nuxtjs/auth-next',
+		'@nuxtjs/dotenv',
+		['cookie-universal-nuxt', { alias: 'cookiz' }],
+		'@nuxtjs/dotenv'
+	],
 
 	googleFonts: {
 		families: {
@@ -40,8 +59,85 @@ export default {
 		}
 	},
 
+	axios: {
+		baseURL: 'https://0aff-103-108-158-158.ngrok-free.app/api/',
+		headers: {
+			'Content-Type': 'application/json',
+			accept: 'application/json',
+			'ngrok-skip-browser-warning': true
+		}
+	},
+
+	auth: {
+		redirect: {
+			// login: '/login',
+			home: false,
+			logout: '/login'
+			// callback: '/callback'
+		},
+		strategies: {
+			local: {
+				scheme: 'refresh',
+				token: {
+					property: 'token',
+					maxAge: 1800,
+					type: 'JWT'
+				},
+				user: {
+					property: false,
+					autoFetch: true
+				},
+				endpoints: {
+					login: {
+						url: 'v1/auth/login',
+						method: 'post',
+						propertyName: 'token'
+					},
+					logout: false,
+					user: { url: 'v1/auth/me', method: 'get' }
+				},
+				tokenRequired: true,
+				tokenType: 'JWT',
+				globalToken: true
+				// globalToken: true,
+				// autoFetchUser: true
+			}
+
+			//   google: {
+			// 	clientId: '981430623670-alri43dk2knfrc7j9rlg269mi5td3n1o.apps.googleusercontent.com',
+			// 	codeChallengeMethod: '',
+			// 	responseType: 'code',
+			// 	endpoints: {
+			// 	  token: 'https://base.api.k-hub.org/a3/authGoogle/',
+			// 	  userInfo: 'https://www.googleapis.com/oauth2/v3/userinfo',
+			// 	}
+			//   },
+		},
+		plugins: [
+			{ src: '~/plugins/apiBase', mode: 'client' }
+			//   { src: "~/plugins/apiLog", mode: "client" },
+			//   { src: "~/plugins/apiReport", mode: "client" },
+			//   { src: "~/plugins/apiReport3", mode: "client" },
+			//   { src: "~/plugins/apiLocal", mode: "client" },
+			// 	 { src: "~/plugins/apiPlatform", mode: "client" },
+			//   { src: "~/plugins/axios", mode: "client" },
+		],
+		cookie: {
+			options: {
+				sameSite: 'lax'
+			}
+		}
+	},
+
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {
+		plugins: [
+			new webpack.ProvidePlugin({
+				// global modules
+				_: 'lodash'
+			})
+		],
+		transpile: ['defu'],
 		postcss: {
 			plugins: {
 				tailwindcss: {},

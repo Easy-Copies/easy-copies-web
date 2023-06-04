@@ -6,12 +6,12 @@
 					class="col-span-12 lg:col-span-6 text-white flex flex-col gap-8 lg:gap-14 items-center lg:items-start"
 				>
 					<div
-						class="text-center lg:text-left text-5xl lg:text-[80px] leading-none"
+						class="text-center lg:text-left text-5xl lg:text-[70px] leading-none"
 					>
-						Lorem Ipsum is Simply
+						{{ title }}
 					</div>
 					<div class="text-center lg:text-left text-lg lg:text-2xl">
-						Titip tugasmu hari ini, ambil esok hari.
+						{{ subtitle }}
 					</div>
 					<button class="w-fit bg-secondary rounded-lg px-9 py-4">
 						Coba Sekarang
@@ -28,3 +28,15 @@
 		</div>
 	</div>
 </template>
+
+<script>
+export default {
+	data() {
+		return {
+			title: 'Kemudahan Printing dengan Satu Ketukan',
+			subtitle:
+				'Temukan cara baru yang praktis untuk memenuhi kebutuhan printing kamu dengan Easy Copies!'
+		}
+	}
+}
+</script>
