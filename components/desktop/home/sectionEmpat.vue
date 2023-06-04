@@ -9,7 +9,9 @@
 				<div>Ayo mulai sekarang!</div>
 			</div>
 			<div class="flex justify-center">
-				<button class="w-fit bg-secondary rounded-lg px-9 py-4 text-white">
+				<button
+					class="w-fit bg-secondary rounded-lg px-9 py-4 text-white"
+				>
 					Mulai Sekarang
 				</button>
 			</div>

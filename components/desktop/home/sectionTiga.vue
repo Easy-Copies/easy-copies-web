@@ -15,11 +15,14 @@
 							Punya Bisnis Printing? Daftarkan Tokomu Sekarang!
 						</div>
 						<div class="text-xl">
-							Bantu printing tugas mahasiswa disekitarmu. Makin banyak mahasiswa
-							terbantu, makin banyak keuntungan yang kamu dapatkan.
+							Bantu printing tugas mahasiswa disekitarmu. Makin
+							banyak mahasiswa terbantu, makin banyak keuntungan
+							yang kamu dapatkan.
 						</div>
 					</div>
-					<button class="w-fit bg-secondary rounded-lg px-9 py-4 text-white">
+					<button
+						class="w-fit bg-secondary rounded-lg px-9 py-4 text-white"
+					>
 						Daftarkan Tokomu
 					</button>
 				</div>

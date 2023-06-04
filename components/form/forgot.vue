@@ -12,7 +12,9 @@
 				@click="btnClose"
 			/>
 			<div class="text-4xl text-center mb-7">Lupa Password</div>
-			<div class="text-sm mb-4">Masukkan alamat email untuk menerima OTP</div>
+			<div class="text-sm mb-4">
+				Masukkan alamat email untuk menerima OTP
+			</div>
 			<div class="w-full lg:w-[320px]">
 				<form action="">
 					<div class="mb-5">

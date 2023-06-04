@@ -13,7 +13,7 @@
 			/>
 			<div class="text-4xl text-center mb-7">Login</div>
 			<div class="w-full lg:w-[320px]">
-				<form action="">
+				<form @submit.prevent="userLogin">
 					<div class="mb-3">
 						<div class="mb-2">Email</div>
 						<InputText
@@ -43,10 +43,16 @@
 
 				<div class="text-center text-sm mb-4">Belum punya akun?</div>
 				<div class="flex items-center gap-2.5">
-					<nuxt-link to="/register-toko" class="button-default w-full">
+					<nuxt-link
+						to="/register-toko"
+						class="button-default w-full"
+					>
 						Daftarkan Toko
 					</nuxt-link>
-					<nuxt-link to="/register-user" class="button-default w-full">
+					<nuxt-link
+						to="/register-user"
+						class="button-default w-full"
+					>
 						Daftar Individu
 					</nuxt-link>
 				</div>
@@ -68,6 +74,36 @@ export default {
 		}
 	},
 	methods: {
+		async userLogin() {
+			this.loader = true
+			try {
+				await this.$auth
+					.loginWith('local', { data: this.form })
+					.then(res => {
+						// console.log(res.data.token)
+						const tokenCookiz = res.data.result.token
+						this.$cookiz.set('jtoken', tokenCookiz)
+						// window.location.href = '/signed'
+						this.$router.push('/signed')
+					})
+			} catch (err) {
+				console.log(err)
+				// const dataError = {...err.response}
+				// // console.log(dataError)
+				// const errorMasuk = dataError.data.reason ? dataError.data.reason : 'Cek email dan password!' ;
+				// // this.$toast.show(this.$t(errorMasuk))
+				this.$toast.show({
+					type: 'danger',
+					title: 'Error',
+					message: 'Email atau Kata Sandi Anda salah!'
+				})
+
+				this.$nextTick(() => {
+					this.loader = false
+				})
+			}
+		},
+
 		btnClose() {
 			this.$router.push('/')
 		}
