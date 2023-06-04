@@ -17,7 +17,7 @@ export default {
 			localStorage.clear()
 			this.$nextTick(() => {
 				// $nuxt.$emit('refreshPage')
-				window.location.href = '/login'
+				window.location.href = '/'
 				// this.$router.push('/login')
 			})
 		}

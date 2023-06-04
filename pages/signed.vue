@@ -17,7 +17,8 @@ export default {
 	},
 	methods: {
 		initialize() {
-			this.getCurrentUser()
+			this.$router.push('/')
+			// this.getCurrentUser()
 			// getTarget()
 		},
 
@@ -25,7 +26,7 @@ export default {
 			await this.$apiBase
 				.get('v1/auth/me')
 				.then(res => {
-					console.log(res.data.results)
+					console.log(res.data.result)
 
 					this.$nextTick(() => {
 						// window.location.href = '/'

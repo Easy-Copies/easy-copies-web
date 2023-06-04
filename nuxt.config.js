@@ -56,11 +56,12 @@ export default {
 	googleFonts: {
 		families: {
 			Quicksand: true
+			// wght: [100, 300, 400, 500, 600, 700, 800, 900]
 		}
 	},
 
 	axios: {
-		baseURL: 'https://0aff-103-108-158-158.ngrok-free.app/api/',
+		baseURL: 'https://52e4-103-247-196-20.ngrok-free.app/api/',
 		headers: {
 			'Content-Type': 'application/json',
 			accept: 'application/json',

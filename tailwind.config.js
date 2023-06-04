@@ -11,7 +11,11 @@ module.exports = {
 		extend: {
 			colors: {
 				primary: '#1D2539',
-				secondary: '#7081AA'
+				secondary: '#7081AA',
+				tiga: '#F3F3F3',
+				empat: '#23A3F8',
+				lima: '#FA3E57',
+				enam: '#D6D6D6'
 			},
 			zIndex: {
 				1: '1',

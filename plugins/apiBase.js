@@ -35,7 +35,7 @@ export default function ({ $axios, redirect, app }, inject) {
 		}
 	})
 
-	const endPoint = 'https://0aff-103-108-158-158.ngrok-free.app/api/'
+	const endPoint = 'https://52e4-103-247-196-20.ngrok-free.app/api/'
 	apiBase.setBaseURL(endPoint)
 
 	// Inject to context as $api

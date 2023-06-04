@@ -1,6 +1,6 @@
 <template>
 	<div class="pt-24 pl-[290px]">
-		<DashboardList />
+		<DashboardRoleList />
 	</div>
 </template>
 

@@ -76,16 +76,18 @@ export default {
 	methods: {
 		async userLogin() {
 			this.loader = true
+			const vA = {
+				email: this.form.email.replace(/\s+/, '').trim().toLowerCase(),
+				password: this.form.password
+			}
 			try {
-				await this.$auth
-					.loginWith('local', { data: this.form })
-					.then(res => {
-						// console.log(res.data.token)
-						const tokenCookiz = res.data.result.token
-						this.$cookiz.set('jtoken', tokenCookiz)
-						// window.location.href = '/signed'
-						this.$router.push('/signed')
-					})
+				await this.$auth.loginWith('local', { data: vA }).then(res => {
+					// console.log(res.data.token)
+					const tokenCookiz = res.data.result.token
+					this.$cookiz.set('jtoken', tokenCookiz)
+					// window.location.href = '/signed'
+					this.$router.push('/signed')
+				})
 			} catch (err) {
 				console.log(err)
 				// const dataError = {...err.response}

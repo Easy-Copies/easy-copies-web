@@ -6,4 +6,16 @@
 	.button-default {
 		@apply text-white bg-secondary rounded-lg py-2.5 px-4 text-center hover:bg-secondary/90;
 	}
+
+	.button-outline {
+		@apply text-sm text-primary bg-white border border-primary py-2.5 px-5 text-center rounded-md hover:bg-primary hover:text-white;
+	}
+
+	.button-edit {
+		@apply text-xs text-white bg-empat rounded-md px-3 py-1.5 hover:bg-empat/80;
+	}
+
+	.button-delete {
+		@apply text-xs text-white bg-lima rounded-md px-3 py-1.5 hover:bg-lima/80;
+	}
 }
