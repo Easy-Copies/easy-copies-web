@@ -7,6 +7,10 @@
 		@apply text-white bg-secondary rounded-lg py-2.5 px-4 text-center hover:bg-secondary/90;
 	}
 
+	.button-main {
+		@apply text-white bg-primary rounded-lg py-2.5 px-4 text-center hover:bg-primary/90;
+	}
+
 	.button-outline {
 		@apply text-sm text-primary bg-white border border-primary py-2.5 px-5 text-center rounded-md hover:bg-primary hover:text-white;
 	}
@@ -17,5 +21,9 @@
 
 	.button-delete {
 		@apply text-xs text-white bg-lima rounded-md px-3 py-1.5 hover:bg-lima/80;
+	}
+
+	.button-permission {
+		@apply text-xs text-white bg-tujuh rounded-md px-3 py-1.5 hover:bg-tujuh/80;
 	}
 }

@@ -50,7 +50,23 @@ export default {
 		'@nuxtjs/auth-next',
 		'@nuxtjs/dotenv',
 		['cookie-universal-nuxt', { alias: 'cookiz' }],
-		'@nuxtjs/dotenv'
+		'@nuxtjs/dotenv',
+		[
+			'nuxt-tailvue',
+			{
+				modal: true,
+				toast: {
+					defaultProps: {
+						timeout: 3,
+						classToast: 'bg-white z-50',
+						// classTitle: 'text-white',
+						classMessage: 'text-primary',
+						// classClose: 'text-white',
+						classTimeout: 'bg-primary'
+					}
+				}
+			}
+		]
 	],
 
 	googleFonts: {

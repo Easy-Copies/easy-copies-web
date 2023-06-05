@@ -5,7 +5,8 @@ module.exports = {
 		'./layouts/**/*.vue',
 		'./pages/**/*.vue',
 		'./plugins/**/*.{js,ts}',
-		'./nuxt.config.{js,ts}'
+		'./nuxt.config.{js,ts}',
+		'node_modules/tv-*/dist/tv-*.umd.min.js'
 	],
 	theme: {
 		extend: {
@@ -15,7 +16,8 @@ module.exports = {
 				tiga: '#F3F3F3',
 				empat: '#23A3F8',
 				lima: '#FA3E57',
-				enam: '#D6D6D6'
+				enam: '#D6D6D6',
+				tujuh: '#EEAD17'
 			},
 			zIndex: {
 				1: '1',

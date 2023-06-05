@@ -9,3 +9,24 @@ body {
 	scrollbar-width: none;
 	overflow-y: scroll;
 }
+
+// CHIP
+.chip-sm {
+	border-radius: 5px;
+	padding: 9px 8px;
+	cursor: pointer;
+	background: #1d2539;
+	border: 1px solid #1d2539;
+	display: flex;
+	align-items: center;
+	transition: all 0.2s ease-in-out;
+	.chip-label {
+		margin-left: 3px;
+		color: #fff;
+		font-size: small;
+	}
+	.chip-button {
+		margin-left: 10px;
+		color: #fff;
+	}
+}
