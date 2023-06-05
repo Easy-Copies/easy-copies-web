@@ -4,7 +4,7 @@
 			:ref="name"
 			type="text"
 			:name="name"
-			class="focus:outline-none w-full border border-gray-100 rounded-md px-3 py-3 text-primary placeholder-[#9E9E9E] focus:border-primary"
+			class="focus:outline-none w-full border border-enam rounded-md px-3 py-3 text-primary placeholder-[#9E9E9E] focus:border-primary"
 			:class="kelas"
 			:placeholder="placeholder"
 			:value="value"
