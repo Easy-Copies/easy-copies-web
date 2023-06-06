@@ -1,6 +1,5 @@
 // import CryptoJS from 'crypto-js';
 
-// eslint-disable-next-line
 export default function ({ $axios, redirect, app }, inject) {
 	const apiBase = $axios.create({
 		//   headers: {
@@ -58,6 +57,9 @@ export default function ({ $axios, redirect, app }, inject) {
 						// Reset cookies
 						app.$cookiz.set('jtoken', '')
 						app.$cookiz.set('jRefreshToken', '')
+
+						// Redirect
+						redirect('/login')
 
 						if (_error.response && _error.response.data) {
 							return Promise.reject(_error.response.data)
