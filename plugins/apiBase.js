@@ -1,5 +1,6 @@
 // import CryptoJS from 'crypto-js';
 
+// eslint-disable-next-line
 export default function ({ $axios, redirect, app }, inject) {
 	const apiBase = $axios.create({
 		//   headers: {
@@ -20,20 +21,56 @@ export default function ({ $axios, redirect, app }, inject) {
 		}
 		return config
 	})
-	apiBase.onError(error => {
-		const dataError = { ...error.response }
-		if (dataError) {
-			if (dataError.status === 401) {
+	apiBase.interceptors.response.use(
+		res => {
+			return res
+		},
+		async err => {
+			const originalConfig = err.config
+
+			if (err.response) {
+				// Access Token was expired
 				if (
-					['Invalid signature.', 'Signature has expired.'].includes(
-						dataError.data.detail
-					)
+					err.response.status === 401 &&
+					!originalConfig._retry &&
+					!['/auth/verify'].includes(originalConfig?.url)
 				) {
-					redirect('/clear')
+					originalConfig._retry = true
+
+					try {
+						// Make request for refreshing expired token
+						const refreshTokenResponse = await apiBase.post(
+							'/v1/auth/refresh-token',
+							{ refreshToken: app.$cookiz.get('jRefreshToken') }
+						)
+						const { token, refreshToken } =
+							refreshTokenResponse.data.result
+
+						// Set Token to Cookies
+						app.$cookiz.set('jtoken', token)
+						app.$cookiz.set('jRefreshToken', refreshToken)
+
+						// Update authorization header for incoming request
+						apiBase.defaults.headers.common['Authorization'] = token
+
+						return apiBase(originalConfig)
+					} catch (_error) {
+						// Reset cookies
+						app.$cookiz.set('jtoken', '')
+						app.$cookiz.set('jRefreshToken', '')
+
+						if (_error.response && _error.response.data) {
+							return Promise.reject(_error.response.data)
+						}
+
+						return Promise.reject(_error)
+					}
 				}
 			}
+
+			return Promise.reject(err)
 		}
-	})
+	)
 
 	const endPoint = 'https://2732-103-247-196-20.ngrok-free.app/api/'
 	apiBase.setBaseURL(endPoint)

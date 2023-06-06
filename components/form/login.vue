@@ -84,7 +84,8 @@ export default {
 				await this.$auth.loginWith('local', { data: vA }).then(res => {
 					// console.log(res.data.token)
 					const tokenCookiz = res.data.result.token
-					this.$cookiz.set('jtoken', tokenCookiz)
+					const refreshTokenCookiz = res.data.result.refreshToken
+					this.$cookiz.set('jRefreshToken', refreshTokenCookiz)
 					// window.location.href = '/signed'
 					this.$router.push('/signed')
 				})
