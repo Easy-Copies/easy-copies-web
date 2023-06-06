@@ -13,7 +13,15 @@
 			/>
 			<div class="text-4xl text-center mb-7">Register</div>
 			<div class="w-full lg:w-[320px]">
-				<form action="">
+				<form @submit.prevent="validasi">
+					<div class="mb-3">
+						<div class="mb-2">Nama</div>
+						<InputText
+							v-model="form.name"
+							:placeholder="'Masukkan Nama'"
+							:name="prefixName + 'nama'"
+						/>
+					</div>
 					<div class="mb-3">
 						<div class="mb-2">Email</div>
 						<InputText
@@ -22,7 +30,7 @@
 							:name="prefixName + 'email'"
 						/>
 					</div>
-					<div class="mb-3">
+					<div class="mb-10">
 						<div class="mb-2">Password</div>
 						<InputPassword
 							v-model="form.password"
@@ -30,18 +38,30 @@
 							:name="prefixName + 'password'"
 						/>
 					</div>
-					<div class="mb-5">
-						<div class="mb-2">Confirm Password</div>
-						<InputPassword
-							v-model="form.confirmPassword"
-							:placeholder="'Masukkan Konfirmasi Password'"
-							:name="prefixName + 'confirmpassword'"
-						/>
-					</div>
-					<button class="button-default w-full">Daftar</button>
+					<button class="button-default w-full" type="submit">
+						Daftar
+					</button>
 				</form>
 			</div>
 		</div>
+
+		<ElementsModal
+			:key="keyModalSukses + 'register'"
+			v-model="modalSukses"
+			:width="modalWidthSukses"
+			:show="false"
+			:persistent="persistentSukses"
+			:title="modalTitleSukses"
+		>
+			<div class="text-center">
+				<div class="text-primary mb-9">
+					Silahkan cek email anda untuk verifikasi akun.
+				</div>
+				<!-- <div class="flex justify-center gap-5">
+					<button class="button-outline px-3 py-1.5">Kembali Login</button>
+				</div> -->
+			</div>
+		</ElementsModal>
 	</div>
 </template>
 
@@ -52,13 +72,66 @@ export default {
 			prefixName: 'registeruser',
 			loader: false,
 			form: {
+				name: '',
 				email: '',
-				password: '',
-				confirmPassword: ''
-			}
+				password: ''
+			},
+
+			// KEPERLUAN MODAL //
+			modalSukses: false,
+			modalTitleSukses: '',
+			modalWidthSukses: 'w-1/2 xl:w-2/5',
+			keyModalSukses: 0,
+			persistentSukses: true,
+			selectedSukses: null
+			//
 		}
 	},
 	methods: {
+		errorNotif(msg) {
+			this.$toast.show({
+				type: 'danger',
+				title: 'Error',
+				message: msg
+			})
+		},
+
+		errorField(msg) {
+			this.errorNotif(msg)
+		},
+
+		validasi() {
+			if (this.form.name === '') {
+				this.errorField('Nama wajib diisi')
+			} else if (this.form.email === '') {
+				this.errorField('Email wajib diisi')
+			} else if (this.form.password === '') {
+				this.errorField('Password wajib diisi')
+			} else {
+				this.btnDaftar()
+			}
+		},
+
+		async btnDaftar() {
+			await this.$apiBase
+				.post('v1/auth/register', this.form)
+				.then(res => {
+					this.modalSukses = true
+					this.keyModalSukses += 1
+
+					this.$nextTick(() => {
+						this.$toast.show({
+							type: 'success',
+							title: 'Success',
+							message: res.data.message
+						})
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
 		btnClose() {
 			this.$router.push('/')
 		}

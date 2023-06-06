@@ -16,7 +16,7 @@
 				Masukkan alamat email untuk menerima OTP
 			</div>
 			<div class="w-full lg:w-[320px]">
-				<form action="">
+				<form @submit.prevent="validasi">
 					<div class="mb-5">
 						<div class="mb-2">Email</div>
 						<InputText
@@ -25,10 +25,27 @@
 							:name="prefixName + 'email'"
 						/>
 					</div>
-					<button class="button-default w-full">Kirim</button>
+					<button class="button-default w-full" type="submit">
+						Kirim
+					</button>
 				</form>
 			</div>
 		</div>
+
+		<ElementsModal
+			:key="keyModalSukses + 'forgot'"
+			v-model="modalSukses"
+			:width="modalWidthSukses"
+			:show="false"
+			:persistent="persistentSukses"
+			:title="modalTitleSukses"
+		>
+			<div class="text-center">
+				<div class="text-primary mb-9">
+					Silahkan cek email anda untuk ganti password.
+				</div>
+			</div>
+		</ElementsModal>
 	</div>
 </template>
 
@@ -40,10 +57,59 @@ export default {
 			loader: false,
 			form: {
 				email: ''
-			}
+			},
+
+			// KEPERLUAN MODAL //
+			modalSukses: false,
+			modalTitleSukses: '',
+			modalWidthSukses: 'w-1/2 xl:w-2/5',
+			keyModalSukses: 0,
+			persistentSukses: true,
+			selectedSukses: null
+			//
 		}
 	},
 	methods: {
+		errorNotif(msg) {
+			this.$toast.show({
+				type: 'danger',
+				title: 'Error',
+				message: msg
+			})
+		},
+
+		errorField(msg) {
+			this.errorNotif(msg)
+		},
+
+		validasi() {
+			if (this.form.email === '') {
+				this.errorField('Email wajib diisi')
+			} else {
+				this.btnKirim()
+			}
+		},
+
+		async btnKirim() {
+			await this.$apiBase
+				.post('v1/auth/forgot-password', this.form)
+				.then(res => {
+					this.modalSukses = true
+					this.keyModalSukses += 1
+
+					this.$nextTick(() => {
+						this.$toast.show({
+							type: 'success',
+							title: 'Success',
+							message: res.data.message
+						})
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
 		btnClose() {
 			this.$router.push('/')
 		}
