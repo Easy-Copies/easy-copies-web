@@ -85,6 +85,7 @@ export default {
 					// console.log(res.data.token)
 					const tokenCookiz = res.data.result.token
 					const refreshTokenCookiz = res.data.result.refreshToken
+					this.$cookiz.set('jtoken', tokenCookiz)
 					this.$cookiz.set('jRefreshToken', refreshTokenCookiz)
 					// window.location.href = '/signed'
 					this.$router.push('/signed')
