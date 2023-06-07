@@ -15,7 +15,7 @@ export default function ({ $axios, redirect, app }, inject) {
 		var token = app.$cookiz.get('jtoken')
 
 		if (token) {
-			config.headers['Authorization'] = `JWT ${token}`
+			config.headers['Authorization'] = `Bearer ${token}`
 			// config.headers['X-Auth-Token'] = token
 		}
 		return config
@@ -50,7 +50,9 @@ export default function ({ $axios, redirect, app }, inject) {
 						app.$cookiz.set('jRefreshToken', refreshToken)
 
 						// Update authorization header for incoming request
-						apiBase.defaults.headers.common['Authorization'] = token
+						apiBase.defaults.headers.common[
+							'Authorization'
+						] = `Bearer ${token}`
 
 						return apiBase(originalConfig)
 					} catch (_error) {
@@ -74,7 +76,7 @@ export default function ({ $axios, redirect, app }, inject) {
 		}
 	)
 
-	const endPoint = 'https://2732-103-247-196-20.ngrok-free.app/api/'
+	const endPoint = 'https://64c2-103-247-196-20.ngrok-free.app/api/'
 	apiBase.setBaseURL(endPoint)
 
 	// Inject to context as $api
