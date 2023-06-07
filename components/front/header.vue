@@ -172,7 +172,7 @@ export default {
 					})
 				})
 				.catch(err => {
-					console.log('MASUK ERROR')
+					// console.log('MASUK ERROR')
 					console.log(err)
 					// this.$router.push('/login')
 				})
