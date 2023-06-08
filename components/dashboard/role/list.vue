@@ -138,6 +138,7 @@ export default {
 	data() {
 		return {
 			prefixName: 'create',
+			listRole: null,
 			keyMaster: 0,
 			form: {
 				nama: ''
@@ -206,11 +207,18 @@ export default {
 	},
 	methods: {
 		initialize() {
-			this.getListUser()
+			// this.getListRole()
 		},
 
-		getListUser() {
-			console.log('hello')
+		async getListRole() {
+			await this.$apiBase
+				.get('v1/user-management/roles')
+				.then(res => {
+					console.log(res.data.result)
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		},
 
 		errorNotif(msg) {

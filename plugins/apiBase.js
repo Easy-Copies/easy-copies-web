@@ -61,7 +61,7 @@ export default function ({ $axios, redirect, app }, inject) {
 						app.$cookiz.set('jRefreshToken', '')
 
 						// Redirect
-						redirect('/login')
+						redirect('/clear')
 
 						if (_error.response && _error.response.data) {
 							return Promise.reject(_error.response.data)
@@ -76,7 +76,7 @@ export default function ({ $axios, redirect, app }, inject) {
 		}
 	)
 
-	const endPoint = 'https://64c2-103-247-196-20.ngrok-free.app/api/'
+	const endPoint = 'https://00c7-103-247-196-20.ngrok-free.app/api/'
 	apiBase.setBaseURL(endPoint)
 
 	// Inject to context as $api

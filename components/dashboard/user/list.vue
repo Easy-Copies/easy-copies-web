@@ -211,7 +211,7 @@ export default {
 		},
 
 		getListUser() {
-			console.log('hello')
+			// console.log('hello')
 		},
 
 		errorNotif(msg) {

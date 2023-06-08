@@ -144,7 +144,7 @@ export default {
 			await this.$apiBase
 				.get('v1/auth/me')
 				.then(res => {
-					console.log('data:', res.data.result)
+					// console.log('data:', res.data.result)
 					this.dataUser = res.data.result
 
 					this.$nextTick(() => {
