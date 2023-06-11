@@ -77,7 +77,7 @@ export default {
 	},
 
 	axios: {
-		baseURL: 'https://00c7-103-247-196-20.ngrok-free.app/api/',
+		baseURL: 'https://24de-103-247-196-57.ngrok-free.app/api/',
 		headers: {
 			'Content-Type': 'application/json',
 			accept: 'application/json',

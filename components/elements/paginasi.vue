@@ -2,10 +2,10 @@
 	<div v-if="loader">
 		<nav v-if="!loaderPage" aria-label="Page navigation" class="">
 			<ul class="inline-flex items-center overflow-hidden">
-				<li class="mr-3">
+				<li class="">
 					<button
 						:disabled="value === 1"
-						class="h-8 w-9 flex items-center justify-center bg-white hover:bg-gray-100 disabled:text-gray-200 disabled:hover:bg-gray-50 border border-enam rounded"
+						class="h-8 w-9 flex items-center justify-center bg-white hover:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-gray-50 disabled:cursor-not-allowed border border-enam rounded-l"
 						@click="prev"
 					>
 						<i class="ri-arrow-left-s-line"></i>
@@ -14,18 +14,18 @@
 				<li
 					v-for="(item, index) in range"
 					:key="'paginasi' + index"
-					class="mr-3"
+					class=""
 				>
 					<button
 						v-if="item.val === value && item.type === 'number'"
 						disabled
-						class="h-8 px-3 text-sm flex items-center justify-center bg-green-200 text-white border border-enam rounded"
+						class="h-8 px-3 text-sm flex items-center justify-center bg-empat text-white border border-enam"
 					>
 						{{ item.val }}
 					</button>
 					<button
 						v-else-if="item.val !== value && item.type === 'number'"
-						class="h-8 px-3 text-sm flex items-center justify-center bg-white hover:bg-primary/30 border border-enam rounded"
+						class="h-8 px-3 text-sm flex items-center justify-center bg-white hover:bg-primary/30 border border-enam"
 						@click="clickPage(item.val)"
 					>
 						{{ item.val }}
@@ -33,7 +33,7 @@
 					<button
 						v-else-if="item.val !== value && item.type === 'dots'"
 						disabled
-						class="h-8 px-3 text-sm flex items-center justify-center bg-white border border-enam rounded"
+						class="h-8 px-3 text-sm flex items-center justify-center bg-white border border-enam"
 					>
 						{{ item.val }}
 					</button>
@@ -41,7 +41,7 @@
 				<li class="overflow-hidden">
 					<button
 						:disabled="value === totalPage"
-						class="text-sm h-8 w-9 flex items-center justify-center bg-white hover:bg-gray-100 disabled:text-gray-200 disabled:hover:bg-gray-50 border border-enam rounded"
+						class="text-sm h-8 w-9 flex items-center justify-center bg-white hover:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-gray-50 disabled:cursor-not-allowed border border-enam rounded-r"
 						@click="next"
 					>
 						<i class="ri-arrow-right-s-line"></i>
@@ -54,7 +54,7 @@
 				<li class="mr-3">
 					<button
 						disabled
-						class="h-8 w-9 flex items-center justify-center bg-gray-200 disabled:text-gray-200 border border-transparent rounded"
+						class="h-8 w-9 flex items-center justify-center bg-gray-200 disabled:text-gray-200 border border-transparent"
 					></button>
 				</li>
 				<li
@@ -65,27 +65,27 @@
 					<button
 						v-if="item.val === value && item.type === 'number'"
 						disabled
-						class="h-8 w-8 px-3 text-sm flex items-center justify-center bg-gray-200 text-white border border-transparent rounded"
+						class="h-8 w-8 px-3 text-sm flex items-center justify-center bg-gray-200 text-white border border-transparent"
 					>
 						<!-- {{item.val}} -->
 					</button>
 					<button
 						v-else-if="item.val !== value && item.type === 'number'"
-						class="h-8 w-8 px-3 text-sm flex items-center justify-center bg-gray-200 text-white border border-transparent rounded"
+						class="h-8 w-8 px-3 text-sm flex items-center justify-center bg-gray-200 text-white border border-transparent"
 					>
 						<!-- {{item.val}} -->
 					</button>
 					<button
 						v-else-if="item.val !== value && item.type === 'dots'"
 						disabled
-						class="h-8 w-8 px-3 text-sm flex items-center justify-center bg-gray-200 text-white border border-transparent rounded"
+						class="h-8 w-8 px-3 text-sm flex items-center justify-center bg-gray-200 text-white border border-transparent"
 					>
 						<!-- {{item.val}} -->
 					</button>
 				</li>
 				<li class="overflow-hidden">
 					<button
-						class="text-sm h-8 w-9 flex items-center justify-center bg-gray-200 disabled:text-gray-200 border border-transparent rounded"
+						class="text-sm h-8 w-9 flex items-center justify-center bg-gray-200 disabled:text-gray-200 border border-transparent"
 					></button>
 				</li>
 			</ul>
@@ -95,7 +95,7 @@
 
 <script>
 export default {
-	props: ['value', 'totalPage', 'totalVisible', 'loaderPage'],
+	props: ['value', 'total-page', 'total-visible', 'loader-page'],
 	data() {
 		return {
 			// totalVisible: 7,

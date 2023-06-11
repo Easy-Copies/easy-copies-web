@@ -20,17 +20,25 @@
 				</thead>
 				<tbody>
 					<tr
-						v-for="(item, index) in dataUser"
+						v-for="(item, index) in listUser"
 						:key="'users' + index"
 						class="border border-enam text-sm"
 					>
-						<td class="px-5 py-2.5">{{ item.nama }}</td>
+						<td class="px-5 py-2.5">{{ item.name }}</td>
 						<td class="px-5 py-2.5">{{ item.email }}</td>
 						<td class="px-5 py-2.5">{{ item.createdAt }}</td>
 						<td class="px-5 py-2.5">{{ item.updatedAt }}</td>
 						<td class="px-5 py-2.5 flex items-center gap-2.5">
-							<button class="button-edit">Edit</button>
-							<button class="button-delete" @click="btnDelete">
+							<button
+								class="button-edit"
+								@click="btnEdit(item.id)"
+							>
+								Edit
+							</button>
+							<button
+								class="button-delete"
+								@click="btnDelete(item.id)"
+							>
 								Delete
 							</button>
 						</td>
@@ -52,10 +60,13 @@
 					</div>
 					<div class="pagination-area text-center mt-6">
 						<ElementsPaginasi
+							v-if="loader"
 							:key="'pageset' + keyPage"
 							v-model="currentPage"
 							:total-page="totalPage"
 							:total-visible="totalVisible"
+							:loader-page="!loader"
+							@input="onChangePage"
 						/>
 					</div>
 				</div>
@@ -77,7 +88,67 @@
 						<div class="mb-2">Nama</div>
 						<InputText
 							:key="keyMaster + 'nama'"
-							v-model="form.nama"
+							v-model="form.name"
+							:placeholder="'Masukkan Nama'"
+							:name="prefixName + 'nama'"
+						/>
+					</div>
+					<div class="mb-2">
+						<div class="mb-2">Email</div>
+						<InputText
+							:key="keyMaster + 'email'"
+							v-model="form.email"
+							:placeholder="'Masukkan Email'"
+							:name="prefixName + 'email'"
+						/>
+					</div>
+					<div class="mb-2">
+						<div class="mb-2">Password</div>
+						<InputPassword
+							:key="keyMaster + 'password'"
+							v-model="form.password"
+							:placeholder="'Masukkan Password'"
+							:name="prefixName + 'password'"
+						/>
+					</div>
+					<div class="mb-5">
+						<div class="mb-2">Role</div>
+						<InputAutoCompleteMulti
+							:key="prefixName + 'addrole'"
+							v-model="form.roles"
+							:name="prefixName + 'role'"
+							:placeholder="'Pilih Role'"
+							:label="'Role'"
+							:opsi="opsiRoles"
+							:item-value="'id'"
+							:item-label="'label'"
+						/>
+					</div>
+				</div>
+				<div class="text-right">
+					<button class="button-main" @click="validasi">
+						Submit
+					</button>
+				</div>
+			</div>
+		</ElementsModal>
+
+		<!-- MODAL EDIT -->
+		<ElementsModal
+			:key="keyModalEdit + 'edit'"
+			v-model="modalEdit"
+			:width="modalWidthEdit"
+			:show="true"
+			:persistent="persistentEdit"
+			:title="modalTitleEdit"
+		>
+			<div>
+				<div>
+					<div class="mb-2">
+						<div class="mb-2">Nama</div>
+						<InputText
+							:key="keyMaster + 'nama'"
+							v-model="form.name"
 							:placeholder="'Masukkan Nama'"
 							:name="prefixName + 'nama'"
 						/>
@@ -93,20 +164,16 @@
 					</div>
 					<div class="mb-5">
 						<div class="mb-2">Role</div>
-						<InputAutoCompleteMulti
-							:key="prefixName + 'tipeaudience'"
-							v-model="form.role"
+						<InputFieldKategoriMulti
+							v-if="loaderDetail"
+							:key="prefixName + 'role'"
+							v-model="form.roles"
 							:name="prefixName + 'role'"
-							:placeholder="'Pilih Role'"
-							:label="'Role'"
-							:opsi="opsiRole"
-							:item-value="'id'"
-							:item-label="'label'"
 						/>
 					</div>
 				</div>
 				<div class="text-right">
-					<button class="button-main" @click="validasi">
+					<button class="button-main" @click="btnSubmitEdit(idUser)">
 						Submit
 					</button>
 				</div>
@@ -127,9 +194,15 @@
 					Are you sure want to delete user?
 				</div>
 				<div class="flex justify-center gap-5">
-					<button class="button-outline px-3 py-1.5">No</button>
+					<button
+						class="button-outline px-3 py-1.5"
+						@click="btnNoDelete"
+					>
+						No
+					</button>
 					<button
 						class="button-delete px-3 py-1.5 text-sm border border-lima"
+						@click="btnYesDelete(idUser)"
 					>
 						Yes
 					</button>
@@ -144,26 +217,18 @@ export default {
 	data() {
 		return {
 			prefixName: 'create',
+			loader: false,
+			loaderDetail: false,
+			listUser: null,
+			idUser: '',
+			opsiRoles: null,
 			keyMaster: 0,
 			form: {
-				nama: '',
+				name: '',
 				email: '',
-				role: ''
+				password: '',
+				roles: []
 			},
-			dataUser: [
-				{
-					nama: 'Steven',
-					email: 'steven@widyatama.ac.id',
-					createdAt: '2023-05-23T20:29:40',
-					updatedAt: '2023-05-27T19:21:14'
-				},
-				{
-					nama: 'Huda',
-					email: 'huda@widyatama.ac.id',
-					createdAt: '2023-05-23T20:29:40',
-					updatedAt: '2023-05-27T19:21:14'
-				}
-			],
 			sorter: {
 				limit: 10
 			},
@@ -178,6 +243,15 @@ export default {
 			//
 
 			// KEPERLUAN MODAL //
+			modalEdit: false,
+			modalTitleEdit: 'Edit User',
+			modalWidthEdit: 'w-1/2 xl:w-2/5',
+			keyModalEdit: 0,
+			persistentEdit: true,
+			selectedEdit: null,
+			//
+
+			// KEPERLUAN MODAL //
 			modalDelete: false,
 			modalTitleDelete: 'Delete User',
 			modalWidthDelete: 'w-1/2 xl:w-2/5',
@@ -187,19 +261,13 @@ export default {
 			//
 
 			// KEBUTUHAN PAGINASI
-			startIndex: 0,
 			totalVisible: 5,
 			limit: 10,
 			keyPage: 0,
-			offset: 0,
 			totalPage: 1,
-			currentPage: 1
+			currentPage: 1,
+			page: 1
 			//
-		}
-	},
-	computed: {
-		opsiRole() {
-			return this.$store.state.opsi.opsiRole
 		}
 	},
 	mounted() {
@@ -207,11 +275,58 @@ export default {
 	},
 	methods: {
 		initialize() {
+			this.loader = false
+			this.loaderDetail = false
+			this.getOpsiRole()
 			this.getListUser()
 		},
 
-		getListUser() {
-			// console.log('hello')
+		onChangePage(page) {
+			this.page = page
+			this.initialize()
+		},
+
+		async getListUser() {
+			await this.$apiBase
+				.get(
+					'v1/user-management/users?limit=' +
+						this.limit +
+						'&page=' +
+						this.page +
+						'&sort=desc&column=createdAt'
+				)
+				.then(res => {
+					// console.log(res.data.result)
+					this.listUser = res.data.result.rows
+
+					this.totalPage = res.data.result.totalPages
+					this.keyPage += 1
+
+					this.$nextTick(() => {
+						this.loader = true
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
+		async getDetailUser(id) {
+			await this.$apiBase
+				.get('v1/user-management/users/' + id)
+				.then(res => {
+					const vA = res.data.result
+					this.form.name = vA.name
+					this.form.email = vA.email
+					this.form.roles = [vA.roles[0].role.id]
+
+					this.$nextTick(() => {
+						this.loaderDetail = true
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		},
 
 		errorNotif(msg) {
@@ -227,19 +342,109 @@ export default {
 		},
 
 		validasi() {
-			if (this.form.nama === '') {
+			if (this.form.name === '') {
 				this.errorField('Nama wajib diisi')
 			} else if (this.form.email === '') {
 				this.errorField('Email wajib diisi')
-			} else if (this.form.role === '') {
+			} else if (this.form.password === '') {
+				this.errorField('Password wajib diisi')
+			} else if (this.form.roles.length === 0) {
 				this.errorField('Role wajib dipilih')
 			} else {
 				this.btnSubmit()
 			}
 		},
 
-		btnSubmit() {
-			console.log(this.form)
+		async btnSubmit() {
+			await this.$apiBase
+				.post('v1/user-management/users', this.form)
+				.then(res => {
+					this.$toast.show({
+						type: 'success',
+						title: res.data.message,
+						message: 'User berhasil dibuat'
+					})
+
+					this.$nextTick(() => {
+						this.modalCreate = false
+						this.keyModalCreate += 1
+						this.initialize()
+						this.form = {
+							name: '',
+							email: '',
+							password: '',
+							roles: []
+						}
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
+		async btnSubmitEdit(id) {
+			const dataPush = {
+				name: this.form.name,
+				email: this.form.email,
+				roles: this.form.roles
+			}
+
+			await this.$apiBase
+				.put('v1/user-management/users/' + id, dataPush)
+				.then(res => {
+					this.$toast.show({
+						type: 'success',
+						title: 'Updated',
+						message: 'User berhasil diperbarui'
+					})
+
+					this.$nextTick(() => {
+						this.modalEdit = false
+						this.keyModalEdit += 1
+						this.initialize()
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
+		async btnYesDelete(id) {
+			await this.$apiBase
+				.delete('v1/user-management/users/' + id)
+				.then(res => {
+					this.$toast.show({
+						type: 'success',
+						title: 'Deleted',
+						message: 'User berhasil dihapus'
+					})
+
+					this.$nextTick(() => {
+						this.modalDelete = false
+						this.keyModalDelete += 1
+						this.initialize()
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
+		btnNoDelete() {
+			this.modalDelete = false
+			this.keyModalDelete += 1
+		},
+
+		async getOpsiRole() {
+			await this.$apiBase.get('v1/user-management/roles').then(res => {
+				this.opsiRoles = res.data.result.rows.map(e => {
+					const data = {
+						id: e.id,
+						label: e.name
+					}
+					return data
+				})
+			})
 		},
 
 		btnCreate() {
@@ -247,9 +452,17 @@ export default {
 			this.keyModalCreate += 1
 		},
 
-		btnDelete() {
+		btnEdit(id) {
+			this.getDetailUser(id)
+			this.modalEdit = true
+			this.keyModalEdit += 1
+			this.idUser = id
+		},
+
+		btnDelete(id) {
 			this.modalDelete = true
 			this.keyModalDelete += 1
+			this.idUser = id
 		}
 	}
 }
