@@ -48,6 +48,7 @@ export default {
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/auth-next',
+		'@nuxtjs/dayjs',
 		'@nuxtjs/dotenv',
 		['cookie-universal-nuxt', { alias: 'cookiz' }],
 		'@nuxtjs/dotenv',
@@ -69,6 +70,18 @@ export default {
 		]
 	],
 
+	dayjs: {
+		locales: ['id'],
+		defaultLocale: 'id',
+		defaultTimeZone: 'Asia/Jakarta',
+		plugins: [
+			'utc', // import 'dayjs/plugin/utc'
+			'timezone', // import 'dayjs/plugin/timezone'
+			'relativeTime',
+			'advancedFormat'
+		] // Your Day.js plugin
+	},
+
 	googleFonts: {
 		families: {
 			Quicksand: true
@@ -77,7 +90,7 @@ export default {
 	},
 
 	axios: {
-		baseURL: 'https://24de-103-247-196-57.ngrok-free.app/api/',
+		baseURL: 'https://93a2-103-247-196-57.ngrok-free.app/api/',
 		headers: {
 			'Content-Type': 'application/json',
 			accept: 'application/json',

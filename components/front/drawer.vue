@@ -8,10 +8,11 @@
 					v-for="(item, index) in filteredListDashboard"
 					:key="'list' + index"
 				>
-					<nuxt-link :to="item.link">
+					<nuxt-link :to="item.path">
 						<div
 							v-if="item.child.length === 0"
 							class="flex items-center gap-5 text-primary py-3 px-6 hover:bg-gray-50"
+							:class="kelasAktif(item)"
 						>
 							<i :class="item.icon" class="text-2xl"></i>
 							<div class="font-bold">{{ item.label }}</div>
@@ -30,6 +31,7 @@
 								<nuxt-link :to="item2.path">
 									<div
 										class="py-3 px-[68px] hover:bg-gray-50"
+										:class="kelasAktif(item2)"
 									>
 										{{ item2.label }}
 									</div>
@@ -50,19 +52,20 @@ export default {
 	mixins: [global],
 	data() {
 		return {
+			selected: '',
 			roles: [],
 			listDashboard: [
 				{
 					label: 'Dashboard',
 					icon: 'ri-home-2-line',
-					link: '/dashboard',
+					path: '/dashboard',
 					// isShow: true,
 					child: []
 				},
 				{
 					label: 'User Management',
 					icon: 'ri-file-user-line',
-					link: '',
+					path: '',
 					child: [
 						{
 							label: 'User',
@@ -100,6 +103,10 @@ export default {
 	computed: {
 		statusDrawer() {
 			return this.$store.state.drawer
+		},
+
+		currentPath() {
+			return this.$route.path
 		},
 
 		filteredListDashboard() {
@@ -154,6 +161,12 @@ export default {
 				.catch(err => {
 					console.log(err)
 				})
+		},
+
+		kelasAktif(item) {
+			return this.currentPath === item.path
+				? 'bg-primary text-white hover:text-primary hover:bg-gray-50'
+				: ''
 		}
 	}
 }

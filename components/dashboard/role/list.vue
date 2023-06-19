@@ -24,8 +24,12 @@
 						class="border border-enam text-sm"
 					>
 						<td class="px-5 py-2.5">{{ item.name }}</td>
-						<td class="px-5 py-2.5">{{ item.createdAt }}</td>
-						<td class="px-5 py-2.5">{{ item.updatedAt }}</td>
+						<td class="px-5 py-2.5">
+							{{ $dayjs(item.createdAt).format('DD MMM YYYY') }}
+						</td>
+						<td class="px-5 py-2.5">
+							{{ $dayjs(item.updatedAt).format('DD MMM YYYY') }}
+						</td>
 						<td class="px-5 py-2.5 flex items-center gap-2.5">
 							<button
 								class="button-edit"
@@ -49,9 +53,13 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="border border-enam text-sm w-full -mt-[1px]">
+			<div
+				v-if="listRole && listRole.length > limit"
+				class="border border-enam text-sm w-full -mt-[1px]"
+			>
 				<div class="flex items-center justify-between px-5 py-2.5">
-					<div class="">
+					<div></div>
+					<!-- <div class="">
 						<select
 							id="filtertotalpage"
 							v-model="sorter.limit"
@@ -61,7 +69,7 @@
 							<option value="10">10</option>
 							<option value="20">20</option>
 						</select>
-					</div>
+					</div> -->
 					<div class="pagination-area">
 						<ElementsPaginasi
 							v-if="loader"
@@ -174,7 +182,65 @@
 			:persistent="persistentPermission"
 			:title="modalTitlePermission"
 		>
-			<div class="text-center">hello</div>
+			<div class="text-center">
+				<table class="w-full text-left mb-5">
+					<thead class="text-xs">
+						<tr class="uppercase bg-tiga border border-enam">
+							<th class="px-5 py-2.5">CODE</th>
+							<th class="px-5 py-2.5">CREATE</th>
+							<th class="px-5 py-2.5">READ</th>
+							<th class="px-5 py-2.5">UPDATE</th>
+							<th class="px-5 py-2.5">DELETE</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							v-for="(item, index) in dataPermission"
+							:key="'permission' + index"
+							class="border border-enam text-sm"
+						>
+							<td class="px-5 py-2.5">{{ item.code }}</td>
+							<td class="px-5 py-2.5">
+								<div @click="updatePermissions(item)">
+									<InputCheckBox
+										v-model="item.actions.create"
+										:name="'create'"
+									/>
+								</div>
+							</td>
+							<td class="px-5 py-2.5">
+								<div @click="updatePermissions(item)">
+									<InputCheckBox
+										v-model="item.actions.read"
+										:name="'read'"
+									/>
+								</div>
+							</td>
+							<td class="px-5 py-2.5">
+								<div @click="updatePermissions(item)">
+									<InputCheckBox
+										v-model="item.actions.update"
+										:name="'update'"
+									/>
+								</div>
+							</td>
+							<td class="px-5 py-2.5">
+								<div @click="updatePermissions(item)">
+									<InputCheckBox
+										v-model="item.actions.delete"
+										:name="'delete'"
+									/>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- <div class="text-right">
+					<button class="button-main">Submit</button>
+				</div> -->
+			</div>
+			<!-- <pre>{{ dataPermission }}</pre> -->
 		</ElementsModal>
 	</div>
 </template>
@@ -185,14 +251,26 @@ export default {
 		return {
 			prefixName: 'create',
 			loader: false,
+			loaderRole: false,
 			listRole: null,
+			dataPermission: null,
 			idRole: '',
+			authRoleId: '',
 			keyMaster: 0,
 			form: {
 				name: ''
 			},
 			sorter: {
 				limit: 10
+			},
+			setPermission: {
+				permissionCode: '',
+				actions: {
+					create: false,
+					read: false,
+					update: false,
+					delete: false
+				}
 			},
 
 			// KEPERLUAN MODAL //
@@ -225,7 +303,7 @@ export default {
 			// KEPERLUAN MODAL //
 			modalPermission: false,
 			modalTitlePermission: 'Set permission of role admin',
-			modalWidthPermission: 'w-1/2 xl:w-2/5',
+			modalWidthPermission: 'w-3/4',
 			keyModalPermission: 0,
 			persistentPermission: true,
 			selectedPermission: null,
@@ -247,7 +325,9 @@ export default {
 	methods: {
 		initialize() {
 			this.loader = false
+			this.loaderRole = false
 			this.getListRole()
+			this.getCurrentUser()
 		},
 
 		onChangePage(page) {
@@ -291,6 +371,17 @@ export default {
 				})
 		},
 
+		async getPermission() {
+			await this.$apiBase
+				.get('v1/user-management/roles/permissions/' + this.authRoleId)
+				.then(res => {
+					this.dataPermission = res.data.result
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
 		errorNotif(msg) {
 			this.$toast.show({
 				type: 'danger',
@@ -304,8 +395,8 @@ export default {
 		},
 
 		validasi() {
-			if (this.form.nama === '') {
-				this.errorField('Nama wajib diisi')
+			if (this.form.name === '') {
+				this.errorField('Name is required field.')
 			} else {
 				this.btnSubmit()
 			}
@@ -332,6 +423,7 @@ export default {
 				})
 				.catch(err => {
 					console.log(err)
+					this.errorField('Name already used.')
 				})
 		},
 
@@ -342,13 +434,42 @@ export default {
 					this.$toast.show({
 						type: 'success',
 						title: 'Updated',
-						message: 'Role berhasil diperbarui'
+						message: 'Role successfuly updated'
 					})
 
 					this.$nextTick(() => {
 						this.modalEdit = false
 						this.keyModalEdit += 1
 						this.initialize()
+					})
+				})
+				.catch(err => {
+					console.log(err)
+					this.errorField('Name already used.')
+				})
+		},
+
+		async updatePermissions(item) {
+			const data = {
+				permissionCode: item.code,
+				actions: {
+					create: item.actions.create,
+					read: item.actions.read,
+					update: item.actions.update,
+					delete: item.actions.delete
+				}
+			}
+			await this.$apiBase
+				.put(
+					'v1/user-management/roles/permissions/assign/' +
+						this.authRoleId,
+					data
+				)
+				.then(res => {
+					this.$toast.show({
+						type: 'success',
+						title: 'Updated',
+						message: 'Permission successfuly updated'
 					})
 				})
 				.catch(err => {
@@ -385,6 +506,9 @@ export default {
 		btnCreate() {
 			this.modalCreate = true
 			this.keyModalCreate += 1
+			this.form = {
+				name: ''
+			}
 		},
 
 		btnEdit(id) {
@@ -392,6 +516,9 @@ export default {
 			this.modalEdit = true
 			this.keyModalEdit += 1
 			this.idRole = id
+			this.form = {
+				name: ''
+			}
 		},
 
 		btnDelete(id) {
@@ -403,6 +530,21 @@ export default {
 		btnPermission() {
 			this.modalPermission = true
 			this.keyModalPermission += 1
+		},
+
+		async getCurrentUser() {
+			await this.$apiBase
+				.get('v1/auth/me')
+				.then(res => {
+					this.authRoleId = res.data.result.roles[0].id
+
+					this.$nextTick(() => {
+						this.getPermission()
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		}
 	}
 }
